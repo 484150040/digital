@@ -7,6 +7,8 @@ server:
   servlet:
     context-path: /digital
 spring:
+  profiles:
+    active: dev
   redis:
     host: localhost # Redis服务器地址
     database: 0 # Redis数据库索引（默认为0）
@@ -34,14 +36,16 @@ spring:
   aop:
     auto: true
     proxy-target-class: false
-#  rabbitmq:
-#    host: ${RABBIT_MQ_HOST:localhost}
-#    port: ${RABBIT_MQ_PORT:5672}
-#    virtualHost: /digital
-#    username: root
-#    password: root
+  rabbitmq:
+    host: ${RABBIT_MQ_HOST:localhost}
+    port: ${RABBIT_MQ_PORT:5672}
+    virtualHost: /digital
+    username: admin
+    password: admin
   jpa:
     hibernate:
       ddl-auto: update  # 第一次建表create  后面用update,要不然每次重启都会新建表
     show-sql: true #打印执行的sql语句
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect #设置数据库方言  记住必须要使用 MySQL5InnoDBDialect 指定数据库类型对应InnoDB  ;如果使用MySQLDialect 则对应的是MyISAM
+logging:
+  config: classpath:logback.xml

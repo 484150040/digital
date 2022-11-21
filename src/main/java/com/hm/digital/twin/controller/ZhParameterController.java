@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,12 +14,16 @@ import com.hm.digital.twin.biz.StatisticalService;
 import com.hm.digital.twin.entity.ElectronicCall;
 import com.hm.digital.twin.entity.PrisonerRecord;
 import com.hm.digital.twin.entity.Statistical;
+import com.hm.digital.twin.exception.BaseException;
 import com.hm.digital.twin.vo.ElectronicCallVO;
 import com.hm.digital.twin.vo.PrisonerRecordListVO;
 import com.hm.digital.twin.vo.StatisticalVO;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
 @RequestMapping("dataStatistics")
+@Slf4j
 public class ZhParameterController {
 
   @Autowired
@@ -37,6 +42,7 @@ public class ZhParameterController {
    * @return
    */
   @RequestMapping("/getChart")
+  @ExceptionHandler(value = BaseException.class)
   public List<Statistical> getChart(StatisticalVO statisticalVO) {
     List<Statistical> statisticals = statisticalService.findAll(statisticalVO.toSpec());
     return statisticals;
@@ -49,6 +55,7 @@ public class ZhParameterController {
    * @return
    */
   @RequestMapping("/getList")
+  @ExceptionHandler(value = BaseException.class)
   public Page<PrisonerRecord> getList(PrisonerRecordListVO prisonerRecordList) {
     Page<PrisonerRecord> prisonerRecords = prisonerRecordService.findAll(prisonerRecordList.toSpec(),prisonerRecordList.toPageable());
     return prisonerRecords;
@@ -61,6 +68,7 @@ public class ZhParameterController {
    * @return
    */
   @RequestMapping("/findByPrisonIdAndType")
+  @ExceptionHandler(value = BaseException.class)
   public List<ElectronicCall> findByPrisonIdAndType(ElectronicCallVO electronicCallVO) {
     List<ElectronicCall> statisticals = electronicCallService.findAll(electronicCallVO.toSpec());
     return statisticals;
