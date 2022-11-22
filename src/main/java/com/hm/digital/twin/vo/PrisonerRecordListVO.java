@@ -11,6 +11,7 @@ import lombok.Data;
 
 @Data
 public class PrisonerRecordListVO extends BaseQuery<PrisonerRecord> {
+
   /**
    * 请求参数
    */

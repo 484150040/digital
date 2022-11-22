@@ -3,8 +3,10 @@ package com.hm.digital.twin.controller;
 
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,6 +18,7 @@ import com.dahuatech.icc.oauth.http.DefaultClient;
 import com.dahuatech.icc.oauth.http.IClient;
 import com.dahuatech.icc.oauth.model.v202010.GeneralRequest;
 import com.dahuatech.icc.oauth.model.v202010.GeneralResponse;
+import com.hm.digital.twin.util.DhHttpClientUtil;
 
 import lombok.SneakyThrows;
 
@@ -30,17 +33,20 @@ public class TestController {
   @Value("${icc.clientSecret}")
   private String clientSecret;
 
+  @Autowired
+  private DhHttpClientUtil dewHttpClientUtil;
+
   @SneakyThrows
   @RequestMapping("/tttt")
   @ResponseBody
   public String tttt(@RequestBody Map<String,Object> param,@RequestParam String url) {
-      IClient iClient = new DefaultClient(host, clientId, clientSecret);
-      GeneralRequest generalRequest =
-          new GeneralRequest(url, Method.POST);
-      generalRequest.body(JSONUtil.toJsonStr(JSONUtil.parseObj(param)));
-      GeneralResponse subscribeResponse =
-          iClient.doAction(generalRequest, generalRequest.getResponseClass());
-      return subscribeResponse.toString();
+      return dewHttpClientUtil.post(url,param);
   }
 
+  @SneakyThrows
+  @RequestMapping("/tttt1/{id}")
+  @ResponseBody
+  public String tttt1(@PathVariable String id,@RequestParam String url) {
+    return dewHttpClientUtil.get(url,id);
+  }
 }
