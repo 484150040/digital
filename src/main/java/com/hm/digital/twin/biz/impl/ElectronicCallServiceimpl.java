@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.hm.digital.twin.biz.ElectronicCallService;
-import com.hm.digital.twin.entity.ElectronicCall;
-import com.hm.digital.twin.mapper.ElectronicCallMapper;
+import com.hm.digital.clocking.biz.ElectronicCallService;
+import com.hm.digital.clocking.entity.ElectronicCall;
+import com.hm.digital.clocking.mapper.ElectronicCallMapper;
 
 @Service
 public class ElectronicCallServiceimpl implements ElectronicCallService {

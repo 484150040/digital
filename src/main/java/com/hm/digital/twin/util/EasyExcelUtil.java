@@ -1,0 +1,70 @@
+package com.hm.digital.twin.util;
+
+import java.io.File;
+import java.util.Collection;
+import java.util.Map;
+
+import javax.swing.filechooser.FileSystemView;
+
+import org.apache.commons.lang3.StringUtils;
+
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.write.metadata.WriteSheet;
+import com.alibaba.excel.write.metadata.fill.FillConfig;
+import com.alibaba.excel.write.metadata.fill.FillWrapper;
+import com.hm.digital.twin.dto.EasyExcelDto;
+
+/**
+ * easyexcel 模板导出工具
+ * @author LionLi
+ */
+public class EasyExcelUtil {
+
+  // 系统桌面路径
+  public static final String HOME_PATH = FileSystemView.getFileSystemView().getHomeDirectory().getPath();
+  // classpath 路径
+  public static final String CLASS_PATH = EasyExcelUtil.class.getResource("/").getPath();
+  // classpath 下 excel 文件存储路径
+  public static final String SAVE_PATH = "excel" + File.separator;
+  // 文件后缀
+  public static final String SUFFIX = ".xlsx";
+
+  public static String export(EasyExcelDto easyExcelObj) {
+    String path = easyExcelObj.getExportPath();
+    // 如果导出路径为空 默认使用系统桌面路径
+    if (StringUtils.isBlank(path)) {
+      path = HOME_PATH;
+    }
+    // 导出路径
+    String exportPath = path + File.separator + easyExcelObj.getExportName() + SUFFIX;
+    // 模板所在位置路径
+    String templateFileName = CLASS_PATH + SAVE_PATH + easyExcelObj.getTemplateName() + SUFFIX;
+
+    ExcelWriter excelWriter = EasyExcel.write(exportPath).withTemplate(templateFileName).build();
+    WriteSheet writeSheet = EasyExcel.writerSheet().build();
+    if (easyExcelObj.getData() != null) {
+      // 单表多数据导出 模板格式为 {.属性}
+      for (Object d : easyExcelObj.getData()) {
+        excelWriter.fill(d, writeSheet);
+      }
+    } else if (easyExcelObj.getMultiListMap() != null) {
+      // 多表多数据导出
+      for (Map.Entry<String, Object> map : easyExcelObj.getMultiListMap().entrySet()) {
+        // 设置列表后续还有数据
+        FillConfig fillConfig = FillConfig.builder().forceNewRow(Boolean.TRUE).build();
+        if (map.getValue() instanceof Collection) {
+          // 多表导出必须使用 FillWrapper 模板格式为 {key.属性}
+          excelWriter.fill(new FillWrapper(map.getKey(), (Collection<?>)map.getValue()), fillConfig, writeSheet);
+        } else {
+          excelWriter.fill(map.getValue(),writeSheet);
+        }
+      }
+    } else {
+      throw new IllegalArgumentException("数据为空");
+    }
+    // 结束构建
+    excelWriter.finish();
+    return exportPath;
+  }
+}

@@ -3,7 +3,6 @@ package com.hm.digital.twin.util;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import com.dahuatech.hutool.http.Method;

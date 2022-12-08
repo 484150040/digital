@@ -2,10 +2,10 @@ package com.hm.digital.twin.vo;
 
 import org.springframework.data.jpa.domain.Specification;
 
-import com.hm.digital.twin.config.QueryCondition;
-import com.hm.digital.twin.entity.ElectronicCall;
-import com.hm.digital.twin.enums.MatchType;
-import com.hm.digital.twin.query.BaseQuery;
+import com.hm.digital.common.config.QueryCondition;
+import com.hm.digital.clocking.entity.ElectronicCall;
+import com.hm.digital.common.enums.MatchType;
+import com.hm.digital.common.query.BaseQuery;
 
 import lombok.Data;
 

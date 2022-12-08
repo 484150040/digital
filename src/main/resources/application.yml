@@ -8,7 +8,7 @@ server:
     context-path: /digital
 spring:
   profiles:
-    active: dev
+    active: digital
   redis:
     host: localhost # Redis服务器地址
     database: 0 # Redis数据库索引（默认为0）
@@ -39,7 +39,7 @@ spring:
   rabbitmq:
     host: ${RABBIT_MQ_HOST:localhost}
     port: ${RABBIT_MQ_PORT:5672}
-    virtualHost: /digital
+    virtual-host: /
     username: admin
     password: admin
   jpa:
