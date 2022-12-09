@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +17,7 @@ import com.hm.digital.twin.util.EasyExcelUtil;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.SneakyThrows;
 
 /**
  * 测试 easyexcel 模板导出
@@ -37,8 +41,9 @@ public class EasyExcelTestController {
   /**
    * 单列表多数据
    */
-  @PostMapping("/exportOne")
-  public String export() {
+  @SneakyThrows
+  @GetMapping("/exportOne")
+  public void export(HttpServletResponse response) {
     Map<String,String> map = new HashMap<>();
     map.put("title","单列表多数据");
     map.put("test1","数据测试1");
@@ -47,15 +52,15 @@ public class EasyExcelTestController {
     map.put("test4","数据测试4");
     map.put("testTest","666");
     List<TestObj> list = new ArrayList<>();
-    list.add(new TestObj("单列表测试1","列表测试1","列表测试2","列表测试3","列表测试4"));
-    list.add(new TestObj("单列表测试2","列表测试5","列表测试6","列表测试7","列表测试8"));
-    list.add(new TestObj("单列表测试3","列表测试9","列表测试10","列表测试11","列表测试12"));
+    for (int i = 0; i < 20; i++) {
+      list.add(new TestObj("单列表测试"+i,"列表测试"+i,"列表测试"+i,"列表测试"+i,"列表测试"+i));
+    }
     EasyExcelDto obj = new EasyExcelDto()
         .setExportName("单列表多数据导出")
         .setTemplateName("单列表多数据")
         .setExportPath("D:")
         .setData(new Object[]{map,list});
-    return EasyExcelUtil.export(obj);
+    EasyExcelUtil.doPost(response,EasyExcelUtil.export(obj));
   }
 
 }

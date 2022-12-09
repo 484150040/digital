@@ -8,9 +8,9 @@ import javax.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;
 
-import com.hm.digital.clocking.entity.Statistical;
 import com.hm.digital.common.enums.InputParameterEnum;
 import com.hm.digital.common.query.BaseQuery;
+import com.hm.digital.inface.entity.Statistical;
 
 import lombok.Data;
 

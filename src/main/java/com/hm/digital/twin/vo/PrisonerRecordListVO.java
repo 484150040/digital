@@ -3,9 +3,9 @@ package com.hm.digital.twin.vo;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.hm.digital.common.config.QueryCondition;
-import com.hm.digital.clocking.entity.PrisonerRecord;
 import com.hm.digital.common.enums.MatchType;
 import com.hm.digital.common.query.BaseQuery;
+import com.hm.digital.inface.entity.PrisonerRecord;
 
 import lombok.Data;
 

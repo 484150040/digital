@@ -8,8 +8,8 @@ import javax.persistence.criteria.Predicate;
 
 import org.springframework.data.jpa.domain.Specification;
 
-import com.hm.digital.clocking.entity.PrisonerRecord;
 import com.hm.digital.common.query.BaseQuery;
+import com.hm.digital.inface.entity.PrisonerRecord;
 
 import lombok.Data;
 

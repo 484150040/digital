@@ -1,9 +1,15 @@
 package com.hm.digital.twin.util;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 
+import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import javax.swing.filechooser.FileSystemView;
 
 import org.apache.commons.lang3.StringUtils;
@@ -13,6 +19,7 @@ import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.excel.write.metadata.fill.FillConfig;
 import com.alibaba.excel.write.metadata.fill.FillWrapper;
+import com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
 import com.hm.digital.twin.dto.EasyExcelDto;
 
 /**
@@ -30,6 +37,7 @@ public class EasyExcelUtil {
   // 文件后缀
   public static final String SUFFIX = ".xlsx";
 
+
   public static String export(EasyExcelDto easyExcelObj) {
     String path = easyExcelObj.getExportPath();
     // 如果导出路径为空 默认使用系统桌面路径
@@ -39,9 +47,10 @@ public class EasyExcelUtil {
     // 导出路径
     String exportPath = path + File.separator + easyExcelObj.getExportName() + SUFFIX;
     // 模板所在位置路径
-    String templateFileName = CLASS_PATH + SAVE_PATH + easyExcelObj.getTemplateName() + SUFFIX;
+    String templateFileName = "D:\\excel\\" + easyExcelObj.getTemplateName() + SUFFIX;
+//    String templateFileName = CLASS_PATH + SAVE_PATH + easyExcelObj.getTemplateName() + SUFFIX;
 
-    ExcelWriter excelWriter = EasyExcel.write(exportPath).withTemplate(templateFileName).build();
+    ExcelWriter excelWriter = EasyExcel.write(exportPath).registerWriteHandler(new LongestMatchColumnWidthStyleStrategy()).withTemplate(templateFileName).build();
     WriteSheet writeSheet = EasyExcel.writerSheet().build();
     if (easyExcelObj.getData() != null) {
       // 单表多数据导出 模板格式为 {.属性}
@@ -60,6 +69,7 @@ public class EasyExcelUtil {
           excelWriter.fill(map.getValue(),writeSheet);
         }
       }
+
     } else {
       throw new IllegalArgumentException("数据为空");
     }
@@ -67,4 +77,34 @@ public class EasyExcelUtil {
     excelWriter.finish();
     return exportPath;
   }
+
+
+  public static void doPost(HttpServletResponse response,String filePath)
+      throws ServletException, IOException {
+    String fileName=filePath.substring(filePath.lastIndexOf("\\")+1);//下载后设置的文件名
+    if(null != filePath){
+      File downloadFile = new File(filePath);
+      if(downloadFile.exists()){
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-Disposition", "attachment; filename="+fileName);
+        Long length = downloadFile.length();
+        response.setContentLength(length.intValue());
+        ServletOutputStream out = response.getOutputStream();
+        FileInputStream is = new FileInputStream(downloadFile);
+        BufferedInputStream bis = new BufferedInputStream(is);
+        int size = 0;
+        byte[] b = new byte[4096];
+        while((size = bis.read(b)) != -1){
+          out.write(b, 0, size);
+        }
+        bis.close();
+        out.flush();
+        out.close();
+      }else{
+        System.out.println("文件不存在!");
+      }
+    }
+  }
+
+
 }
