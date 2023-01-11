@@ -1,4 +1,4 @@
-package com.hm.digital.clocking.vo;
+package com.hm.digital.twin.vo;
 
 import java.util.ArrayList;
 import java.util.List;

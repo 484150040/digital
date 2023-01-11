@@ -8,10 +8,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 
-import com.hm.digital.clocking.vo.StatisticalVO;
 import com.hm.digital.inface.biz.StatisticalService;
 import com.hm.digital.inface.entity.Statistical;
 import com.hm.digital.inface.mapper.StatisticalMapper;
+import com.hm.digital.twin.vo.StatisticalVO;
 
 @Service
 public class StatisticalServiceimpl implements StatisticalService {

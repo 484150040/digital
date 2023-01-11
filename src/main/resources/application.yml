@@ -7,6 +7,20 @@ server:
   servlet:
     context-path: /digital
 spring:
+  gateway:
+    globalcors:  #全局的跨域处理
+      add-to-simple-url-handler-mapping: true  #解决options请求被拦截问题
+      corsConfigurations:
+        '[/**]':
+          allowedHeaders: "*"   # 允许在请求头中携带的头信息
+          allowedOrigins: "*"
+          maxAge: 360000 # 这次跨域检测有效期
+          allowedMethods:
+            - GET
+            - POST
+            - DELETE
+            - PUT
+            - OPTION
   profiles:
     active: digital
   redis:
@@ -49,12 +63,12 @@ spring:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect #设置数据库方言  记住必须要使用 MySQL5InnoDBDialect 指定数据库类型对应InnoDB  ;如果使用MySQLDialect 则对应的是MyISAM
 logging:
   config: classpath:logback.xml
-icc:
-  host: 115.236.17.59:9021
-  clientId: CompanyName
-  clientSecret: 42bec152-8f04-476a-9aec-e7d616ff3cb3
-zh:
-  startTime: 2019-01-01
-  httpGetChart: http://newings.tech:8099/dataStatistics/getChart
-  httpGetChartOrecle: http://newings.tech:8001/dataStatistics/getChart
-  electronicCall: http://newings.tech:8888/jc/rollcall/findByPrisonIdAndType
+#icc:
+#  host: 115.236.17.59:9021
+#  clientId: CompanyName
+#  clientSecret: 42bec152-8f04-476a-9aec-e7d616ff3cb3
+#zh:
+#  startTime: 2019-01-01
+#  httpGetChart: http://newings.tech:8099/dataStatistics/getChart
+#  httpGetChartOrecle: http://newings.tech:8001/dataStatistics/getChart
+#  electronicCall: http://newings.tech:8888/jc/rollcall/findByPrisonIdAndType
