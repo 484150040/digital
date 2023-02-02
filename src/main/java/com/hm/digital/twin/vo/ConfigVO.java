@@ -48,6 +48,12 @@ public class ConfigVO extends BaseQuery<Config> {
   @QueryCondition(func = MatchType.equal)
   private String universe;
 
+  /**
+   * 处理状态
+   */
+  @QueryCondition(func = MatchType.equal)
+  private String status;
+
   @Override
   public Specification<Config> toSpec() {
     return super.toSpecWithAnd();
