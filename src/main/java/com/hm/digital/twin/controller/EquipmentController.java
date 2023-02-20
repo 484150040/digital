@@ -78,4 +78,28 @@ public class EquipmentController extends BaseController<EquipmentMapper, Config>
     }
     return equiomentList;
   }
+
+
+  /**
+   * 查询配置信息
+   *
+   * @param equioment
+   * @return
+   */
+  @SneakyThrows
+  @RequestMapping("/findListAll")
+  public List<Equipment> findListAll(@RequestBody Equipment equioment) {
+    List<Equipment> equiomentList = new ArrayList<>();
+    List<Equipment> equipments = equiomentService.findAll(equioment);
+    equipments.forEach(e -> {
+      Equipment equiomentone = new Equipment();
+      equiomentone.setParentId(e.getId());
+      List<Equipment> equipmentone = equiomentService.findAll(equiomentone);
+      equiomentList.addAll(equipmentone);
+    });
+    if (CollectionUtils.isEmpty(equiomentList)) {
+      return equiomentList;
+    }
+    return equiomentList;
+  }
 }
