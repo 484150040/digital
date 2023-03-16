@@ -9,100 +9,51 @@ import javax.persistence.criteria.Predicate;
 
 import org.springframework.data.jpa.domain.Specification;
 
-import com.alibaba.excel.annotation.ExcelProperty;
 import com.hm.digital.common.config.QueryCondition;
 import com.hm.digital.common.enums.MatchType;
 import com.hm.digital.common.query.BaseQuery;
-import com.hm.digital.inface.entity.Equipment;
+import com.hm.digital.inface.entity.Role;
+import com.hm.digital.inface.entity.User;
 
 import lombok.Data;
 
 @Data
-public class EquipmentVO extends BaseQuery<Equipment> {
+public class RoleVO extends BaseQuery<Role> {
   /**
    * 作业编号
    */
-  @ExcelProperty("作业编号")
   @QueryCondition(func = MatchType.equal)
   private String id;
 
   /**
-   * 备注
+   * 监所编号
    */
-  @ExcelProperty("备注")
   @QueryCondition(func = MatchType.equal)
-  private String content;
-
+  private String prisonId;
   /**
-   * 设备品牌
+   * 角色名称
    */
-  @ExcelProperty("设备品牌")
-  @QueryCondition(func = MatchType.equal)
-  private String brand;
-
-  /**
-   * 设备名称
-   */
-  @ExcelProperty("设备名称")
   @QueryCondition(func = MatchType.like)
   private String name;
 
   /**
-   * 是否有效
+   * 处理状态
    */
-  @ExcelProperty("是否有效")
   @QueryCondition(func = MatchType.equal)
-  private Integer isvalid;
+  private Integer status;
+
 
   /**
-   * 设备code
+   * 父级角色id
    */
-  @ExcelProperty("设备code")
-  @QueryCondition(func = MatchType.equal)
-  private String code;
-
-  /**
-   * 父级设备id
-   */
-  @ExcelProperty("父级设备id")
   @QueryCondition(func = MatchType.equal)
   private String parentId;
 
   /**
-   * IP地址
+   * 角色描述
    */
-  @ExcelProperty("IP地址")
-  private String ipAddress;
-
-  /**
-   * 子网掩码
-   */
-  @ExcelProperty("子网掩码")
-  private String subnetMask;
-
-  /**
-   * 网关
-   */
-  @ExcelProperty("网关")
-  private String gateway;
-
-  /**
-   * Vlan
-   */
-  @ExcelProperty("Vlan")
-  private String vlan;
-
-  /**
-   * 存储IP地址
-   */
-  @ExcelProperty("存储IP地址")
-  private String storageIp;
-
-  /**
-   * 位置
-   */
-  @ExcelProperty("位置")
-  private String position;
+  @QueryCondition(func = MatchType.equal)
+  private String content;
 
   /**
    * 开始时间
@@ -115,8 +66,8 @@ public class EquipmentVO extends BaseQuery<Equipment> {
   private Date endDate;
 
   @Override
-  public Specification<Equipment> toSpec() {
-    Specification<Equipment> spec = super.toSpecWithAnd();
+  public Specification<Role> toSpec() {
+    Specification<Role> spec = super.toSpecWithAnd();
     return ((root, criteriaQuery, criteriaBuilder) -> {
       List<Predicate> predicatesList = new ArrayList<>();
       predicatesList.add(spec.toPredicate(root, criteriaQuery, criteriaBuilder));
@@ -135,5 +86,4 @@ public class EquipmentVO extends BaseQuery<Equipment> {
       return criteriaBuilder.and(predicatesList.toArray(new Predicate[predicatesList.size()]));
     });
   }
-
 }

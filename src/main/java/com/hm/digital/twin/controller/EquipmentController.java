@@ -1,6 +1,7 @@
 package com.hm.digital.twin.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
@@ -9,7 +10,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.nacos.client.naming.utils.CollectionUtils;
 import com.hm.digital.common.enums.ErrorCode;
@@ -19,6 +22,7 @@ import com.hm.digital.inface.biz.EquimentService;
 import com.hm.digital.inface.entity.Equipment;
 import com.hm.digital.inface.mapper.EquipmentMapper;
 import com.hm.digital.twin.dto.EquipmentDto;
+import com.hm.digital.twin.util.EasyExcelUtil;
 import com.hm.digital.twin.vo.EquipmentVO;
 
 import lombok.SneakyThrows;
@@ -122,6 +126,30 @@ public class EquipmentController extends BaseController<EquipmentMapper, Equipme
     if (equipments==null) {
       return ResultData.error(ErrorCode.NULL_OBJ.getValue(), ErrorCode.NULL_OBJ.getDesc());
     }
+    return ResultData.success(equipments);
+  }
+
+
+  /**
+   * 导入数据
+   *
+   * @param file
+   * @param updateSupport
+   * @return
+   * @throws Exception
+   */
+  @RequestMapping("/importExcel")
+  public ResultData importExcel(@RequestParam("file") MultipartFile file,
+      @RequestParam(value = "updateSupport", required = false, defaultValue = "false") Boolean updateSupport) throws Exception {
+    List<EquipmentVO> list = EasyExcelUtil.read(file, EquipmentVO.class);
+    List<Equipment> equipments = new ArrayList<>();
+    list.forEach(equipmentVO -> {
+      Equipment equipment = new Equipment();
+      BeanUtils.copyProperties(equipmentVO, equipment);
+      equipment.setCreateTime(new Date());
+      equipments.add(equipment);
+    });
+    baseBiz.saveAll(equipments);
     return ResultData.success(equipments);
   }
 

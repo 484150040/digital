@@ -63,6 +63,8 @@ spring:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect #设置数据库方言  记住必须要使用 MySQL5InnoDBDialect 指定数据库类型对应InnoDB  ;如果使用MySQLDialect 则对应的是MyISAM
 logging:
   config: classpath:logback.xml
+
+
 #icc:
 #  host: 115.236.17.59:9021
 #  clientId: CompanyName

@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -13,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.swing.filechooser.FileSystemView;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.sl.usermodel.Sheet;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
@@ -21,6 +24,8 @@ import com.alibaba.excel.write.metadata.fill.FillConfig;
 import com.alibaba.excel.write.metadata.fill.FillWrapper;
 import com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
 import com.hm.digital.twin.dto.EasyExcelDto;
+import com.huaweicloud.sdk.thirdparty.org.slf4j.Logger;
+import com.huaweicloud.sdk.thirdparty.org.slf4j.LoggerFactory;
 
 /**
  * easyexcel 模板导出工具
@@ -28,6 +33,9 @@ import com.hm.digital.twin.dto.EasyExcelDto;
  */
 public class EasyExcelUtil {
 
+  private static final Logger logger = LoggerFactory.getLogger(EasyExcelUtil.class);
+
+  private static Sheet initSheet;
   // 系统桌面路径
   public static final String HOME_PATH = FileSystemView.getFileSystemView().getHomeDirectory().getPath();
   // classpath 路径
@@ -100,11 +108,16 @@ public class EasyExcelUtil {
         bis.close();
         out.flush();
         out.close();
+
       }else{
         System.out.println("文件不存在!");
       }
     }
   }
 
-
+  public static <T> List<T> read(MultipartFile file, Class<T> head) throws IOException {
+    return EasyExcel.read(file.getInputStream(), head, null)
+        .autoCloseStream(false)  // 不要自动关闭，交给 Servlet 自己处理
+        .doReadAllSync();
+  }
 }
