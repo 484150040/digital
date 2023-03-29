@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.hm.digital.common.enums.ErrorCode;
 import com.hm.digital.common.rest.BaseController;
-import com.hm.digital.common.utils.MD5Utils;
 import com.hm.digital.common.utils.ResultData;
 import com.hm.digital.inface.biz.RedisService;
 import com.hm.digital.inface.entity.User;
@@ -93,5 +91,26 @@ public class UserController extends BaseController<UserMapper, User> {
       return ResultData.error(ErrorCode.UNKNOWN_ERROR.getValue(), ErrorCode.UNKNOWN_ERROR.getDesc());
     }
     return ResultData.success(map);
+  }
+
+  /**
+   * 添加一条记录
+   *
+   * @param entity
+   * @return
+   */
+  @Override
+  @RequestMapping(value = "", method = RequestMethod.POST)
+  @ResponseBody
+  public ResultData<Object> add(@RequestBody User entity) {
+    UserVO userVO = new UserVO();
+    userVO.setUsername(entity.getUsername());
+    userVO.setPassword(entity.getPassword());
+    List<User> user = baseBiz.findAll(userVO.toSpec());
+    if (CollectionUtils.isEmpty(user)){
+      return ResultData.error(ErrorCode.NULL_OBJ.getValue(), ErrorCode.NULL_OBJ.getDesc());
+    }
+    Object object = baseBiz.save(entity);
+    return ResultData.success(object);
   }
 }

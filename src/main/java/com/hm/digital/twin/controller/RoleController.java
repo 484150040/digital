@@ -1,5 +1,7 @@
 package com.hm.digital.twin.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -41,4 +43,19 @@ public class RoleController extends BaseController<RoleMapper, Role> {
     return ResultData.success(users);
   }
 
+  /**
+   * 查询角色信息列表
+   *
+   * @param roleVO
+   * @return
+   */
+  @SneakyThrows
+  @RequestMapping("/findAllList")
+  public ResultData findAllList(@RequestBody RoleVO roleVO) {
+    List<Role> users = baseBiz.findAll(roleVO.toSpec());
+    if (users==null) {
+      return ResultData.error(ErrorCode.NULL_OBJ.getValue(), ErrorCode.NULL_OBJ.getDesc());
+    }
+    return ResultData.success(users);
+  }
 }

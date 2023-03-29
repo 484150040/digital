@@ -44,7 +44,7 @@ public class JwtInterceptor implements HandlerInterceptor {
       Long time = System.currentTimeMillis() + EXPIRATION * 1000;
       redisService.set(username+"token",redisToken,time);
       //验证令牌
-      JwtUtils.verifyToken(token);
+        JwtUtils.verifyToken(token);
       //验证成功，放行请求
       return true;
     } catch (SignatureVerificationException e) {

@@ -69,6 +69,53 @@ public class UserVO extends BaseQuery<User> {
   @QueryCondition(func = MatchType.gt)
   private Integer loginCount;
 
+  /**
+   * 地址
+   */
+  @QueryCondition(func = MatchType.like)
+  private String addr;
+
+  /**
+   * 版本
+   */
+  @QueryCondition(func = MatchType.equal)
+  private Integer version;
+
+  /**
+   * 城市
+   */
+  @QueryCondition(func = MatchType.equal)
+  private String city;
+
+  /**
+   * 省
+   */
+  @QueryCondition(func = MatchType.equal)
+  private String province;
+
+  /**
+   * 国家
+   */
+  @QueryCondition(func = MatchType.equal)
+  private String country;
+
+  /**
+   * 邮政编码
+   */
+  @QueryCondition(func = MatchType.equal)
+  private String postalCode;
+
+  /**
+   * 记录密码输错次数
+   */
+  @QueryCondition(func = MatchType.equal)
+  private Integer passwordErrorTimes;
+
+  /**
+   * 密码输入错误锁，0为正常。1为锁定
+   */
+  @QueryCondition(func = MatchType.equal)
+  private Integer passwordErrorLock;
 
   /**
    * 开始时间
