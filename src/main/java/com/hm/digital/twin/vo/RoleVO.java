@@ -12,9 +12,11 @@ import javax.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.CollectionUtils;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hm.digital.common.config.QueryCondition;
 import com.hm.digital.common.enums.MatchType;
 import com.hm.digital.common.query.BaseQuery;
+import com.hm.digital.inface.entity.Menu;
 import com.hm.digital.inface.entity.Role;
 import com.hm.digital.inface.entity.User;
 
@@ -57,10 +59,28 @@ public class RoleVO extends BaseQuery<Role> {
    * 批量查询角色id
    */
   private List<String> roleIdList;
+
+  /**
+   * 存放的数据信息
+   */
+  private List<Menu> menuList;
+
   /**
    * 开始时间
    */
   private Date startTime;
+
+  /**
+   * 创建时间
+   */
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+  private Date createTime;
+
+  /**
+   * 修改时间
+   */
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+  private Date modifyTime;
 
   /**
    * 结束时间

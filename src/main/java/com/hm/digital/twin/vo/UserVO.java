@@ -9,10 +9,12 @@ import javax.persistence.criteria.Predicate;
 
 import org.springframework.data.jpa.domain.Specification;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hm.digital.common.config.QueryCondition;
 import com.hm.digital.common.enums.MatchType;
 import com.hm.digital.common.query.BaseQuery;
 import com.hm.digital.inface.entity.Equipment;
+import com.hm.digital.inface.entity.Role;
 import com.hm.digital.inface.entity.User;
 
 import lombok.Data;
@@ -116,6 +118,17 @@ public class UserVO extends BaseQuery<User> {
    */
   @QueryCondition(func = MatchType.equal)
   private Integer passwordErrorLock;
+
+  /**
+   * 角色列表
+   */
+  private List<Role> roleList;
+
+  /**
+   * 创建时间
+   */
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+  private Date createTime;
 
   /**
    * 开始时间
