@@ -3,13 +3,10 @@ package com.hm.digital.twin.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +16,8 @@ import com.hm.digital.common.enums.ErrorCode;
 import com.hm.digital.common.rest.BaseController;
 import com.hm.digital.common.utils.ResultData;
 import com.hm.digital.inface.biz.RedisService;
+import com.hm.digital.inface.biz.RoleMenuService;
+import com.hm.digital.inface.biz.UserService;
 import com.hm.digital.inface.entity.Menu;
 import com.hm.digital.inface.mapper.MenuMapper;
 import com.hm.digital.twin.dto.MenuDto;
@@ -32,6 +31,12 @@ import lombok.SneakyThrows;
 public class MenuController extends BaseController<MenuMapper, Menu> {
   @Autowired
   private RedisService redisService;
+
+  @Autowired
+  private UserService userService;
+
+  @Autowired
+  private RoleMenuService roleMenuService;
   /**
    * 查询菜单信息
    *
@@ -57,7 +62,6 @@ public class MenuController extends BaseController<MenuMapper, Menu> {
   @SneakyThrows
   @RequestMapping("/findAllList")
   public ResultData findAllList(@RequestBody MenuVO menuVO) {
-    String username = redisService.get("username")!=null?redisService.get("username"):null;
     List<MenuDto> menuDtos = new ArrayList<>();
     List<Menu> menus = baseBiz.findAll(menuVO.toSpec());
     for (Menu menu : menus) {
@@ -77,5 +81,55 @@ public class MenuController extends BaseController<MenuMapper, Menu> {
       return ResultData.error(ErrorCode.NULL_OBJ.getValue(), ErrorCode.NULL_OBJ.getDesc());
     }
     return ResultData.success(menuDtos);
+  }
+
+  /**
+   * 查询菜单信息列表
+   *
+   * @return
+   */
+  @SneakyThrows
+  @RequestMapping("/findList")
+  public ResultData findList() {
+    String username = redisService.get("username")!=null?redisService.get("username"):null;
+    List<String> stringList = roleMenuService.getMenuId(username);
+
+    MenuVO menuVO = new MenuVO();
+    menuVO.setMenuList(stringList);
+    List<MenuDto> menuDtos = new ArrayList<>();
+    List<Menu> menus = baseBiz.findAll(menuVO.toSpec());
+    for (Menu menu : menus) {
+      MenuDto menuDto = new MenuDto();
+      BeanUtils.copyProperties(menu, menuDto);
+      List<Menu> menuList= getMenuVO(menu.getMenuName(),menu.getAction(),stringList);
+      List<Menu> menuList1= getMenuVO(menu.getMenuName(),"function",stringList);
+      if (StringUtils.isNotBlank(menu.getMenuParentId())){
+        continue;
+      }
+      menuDto.setChild(menuList);
+      menuDto.setFunction(menuList1);
+      menuDtos.add(menuDto);
+    }
+    if (menus==null) {
+      return ResultData.error(ErrorCode.NULL_OBJ.getValue(), ErrorCode.NULL_OBJ.getDesc());
+    }
+    return ResultData.success(menuDtos);
+  }
+
+  /**
+   * 查询数据信息
+   *
+   * @param menuName
+   * @param action
+   * @param stringList
+   * @return
+   */
+  private List<Menu> getMenuVO(String menuName, String action, List<String> stringList) {
+    MenuVO menuVo = new MenuVO();
+    menuVo.setMenuParentId(menuName);
+    menuVo.setAction(action);
+    menuVo.setMenuList(stringList);
+    List<Menu> menuList = baseBiz.findAll(menuVo.toSpec());
+    return menuList;
   }
 }

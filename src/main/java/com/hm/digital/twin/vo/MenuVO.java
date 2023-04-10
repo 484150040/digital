@@ -4,16 +4,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Column;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.util.CollectionUtils;
 
 import com.hm.digital.common.config.QueryCondition;
 import com.hm.digital.common.enums.MatchType;
 import com.hm.digital.common.query.BaseQuery;
 import com.hm.digital.inface.entity.Menu;
-import com.hm.digital.inface.entity.Role;
 
 import lombok.Data;
 
@@ -29,7 +30,7 @@ public class MenuVO extends BaseQuery<Menu> {
    * 菜单名称
    */
   @QueryCondition(func = MatchType.like)
-  private String name;
+  private String menuName;
 
 
   /**
@@ -70,6 +71,11 @@ public class MenuVO extends BaseQuery<Menu> {
   private String icon;
 
   /**
+   *
+   */
+  private List<String> menuList;
+
+  /**
    * 开始时间
    */
   private Date startTime;
@@ -96,6 +102,15 @@ public class MenuVO extends BaseQuery<Menu> {
             criteriaBuilder.and(
                 criteriaBuilder.lessThanOrEqualTo(
                     root.get("createTime"), endDate)));
+      }
+
+      if (!CollectionUtils.isEmpty(menuList)) {
+        Path<Object> path = root.get("id");  //定义查询的字段
+        CriteriaBuilder.In<Object> in = criteriaBuilder.in(path);
+        for (int i = 0; i <menuList.size() ; i++) {
+          in.value(menuList.get(i));//存入值
+        }
+        predicatesList.add(criteriaBuilder.and(criteriaBuilder.and(in)));
       }
       return criteriaBuilder.and(predicatesList.toArray(new Predicate[predicatesList.size()]));
     });

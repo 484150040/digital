@@ -85,4 +85,9 @@ public class MenuDto {
    * 子类
    */
   private List<Menu> child;
+
+  /**
+   * function集合
+   */
+  private List<Menu> function;
 }

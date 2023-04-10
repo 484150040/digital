@@ -5,23 +5,29 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 
+import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.util.CollectionUtils;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hm.digital.common.config.QueryCondition;
 import com.hm.digital.common.enums.MatchType;
 import com.hm.digital.common.query.BaseQuery;
-import com.hm.digital.inface.entity.Equipment;
-import com.hm.digital.inface.entity.Role;
-import com.hm.digital.inface.entity.User;
+import com.hm.digital.inface.entity.Dictionary;
+import com.hm.digital.inface.entity.Menu;
 
 import lombok.Data;
 
 @Data
-public class UserVO extends BaseQuery<User> {
-
+public class DictionaryVO extends BaseQuery<Dictionary> {
   /**
    * 作业编号
    */
@@ -30,99 +36,29 @@ public class UserVO extends BaseQuery<User> {
 
 
   /**
-   * 用户名称
-   */
-  @QueryCondition(func = MatchType.like)
-  private String name;
-
-  /**
-   * 用户名
+   * 字典CODE
    */
   @QueryCondition(func = MatchType.equal)
-  private String username;
+  private String code;
 
   /**
-   * 密码
+   * 字典值
    */
   @QueryCondition(func = MatchType.equal)
-  private String password;
+  private String value;
 
   /**
-   * 用户邮箱
+   * 字典类型CODE
    */
   @QueryCondition(func = MatchType.equal)
-  private String email;
+  private String dicCode;
+
 
   /**
-   * 用户手机
+   * 备注描述
    */
   @QueryCondition(func = MatchType.equal)
-  private String number;
-
-  /**
-   * 处理状态
-   */
-  @QueryCondition(func = MatchType.equal)
-  private Integer status;
-
-  /**
-   * 登录次数
-   */
-  @QueryCondition(func = MatchType.gt)
-  private Integer loginCount;
-
-  /**
-   * 地址
-   */
-  @QueryCondition(func = MatchType.like)
-  private String addr;
-
-  /**
-   * 版本
-   */
-  @QueryCondition(func = MatchType.equal)
-  private Integer version;
-
-  /**
-   * 城市
-   */
-  @QueryCondition(func = MatchType.equal)
-  private String city;
-
-  /**
-   * 省
-   */
-  @QueryCondition(func = MatchType.equal)
-  private String province;
-
-  /**
-   * 国家
-   */
-  @QueryCondition(func = MatchType.equal)
-  private String country;
-
-  /**
-   * 邮政编码
-   */
-  @QueryCondition(func = MatchType.equal)
-  private String postalCode;
-
-  /**
-   * 记录密码输错次数
-   */
-  @QueryCondition(func = MatchType.equal)
-  private Integer passwordErrorTimes;
-
-  /**
-   * 密码输入错误锁，0为正常。1为锁定
-   */
-  @QueryCondition(func = MatchType.equal)
-  private Integer passwordErrorLock;
-
-  /**
-   * 角色列表
-   */
-  private List<Role> roleList;
+  private String content;
 
   /**
    * 创建时间
@@ -130,6 +66,11 @@ public class UserVO extends BaseQuery<User> {
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
   private Date createTime;
 
+  /**
+   * 更新时间
+   */
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+  private Date modifyTime;
   /**
    * 开始时间
    */
@@ -141,8 +82,8 @@ public class UserVO extends BaseQuery<User> {
   private Date endDate;
 
   @Override
-  public Specification<User> toSpec() {
-    Specification<User> spec = super.toSpecWithAnd();
+  public Specification<Dictionary> toSpec() {
+    Specification<Dictionary> spec = super.toSpecWithAnd();
     return ((root, criteriaQuery, criteriaBuilder) -> {
       List<Predicate> predicatesList = new ArrayList<>();
       predicatesList.add(spec.toPredicate(root, criteriaQuery, criteriaBuilder));
