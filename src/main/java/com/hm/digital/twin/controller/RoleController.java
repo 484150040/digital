@@ -123,4 +123,24 @@ public class RoleController extends BaseController<RoleMapper, Role> {
     }
     return ResultData.success(entity);
   }
+
+
+  /**
+   * 查询该角色菜单信息列表
+   *
+   * @param roleVO
+   * @return
+   */
+  @SneakyThrows
+  @RequestMapping("/findMenuList")
+  public ResultData findMenuList(@RequestBody RoleVO roleVO) {
+    RoleMenuVO roleMenu = new RoleMenuVO();
+    roleMenu.setRoleId(roleVO.getId());
+    List<RoleMenu> userRoles = roleMenuService.select(roleMenu.toSpec());
+    if (CollectionUtils.isEmpty(userRoles)) {
+      return ResultData.error(ErrorCode.NULL_OBJ.getValue(), ErrorCode.NULL_OBJ.getDesc());
+    }
+    return ResultData.success(userRoles);
+  }
+
 }

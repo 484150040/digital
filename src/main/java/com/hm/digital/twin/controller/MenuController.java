@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -97,7 +98,8 @@ public class MenuController extends BaseController<MenuMapper, Menu> {
     MenuVO menuVO = new MenuVO();
     menuVO.setMenuList(stringList);
     List<MenuDto> menuDtos = new ArrayList<>();
-    List<Menu> menus = baseBiz.findAll(menuVO.toSpec());
+    Sort sort = Sort.by(Sort.Direction.ASC, "sortOrder");
+    List<Menu> menus = baseBiz.findAll(menuVO.toSpec(),sort);
     for (Menu menu : menus) {
       MenuDto menuDto = new MenuDto();
       BeanUtils.copyProperties(menu, menuDto);
@@ -129,7 +131,8 @@ public class MenuController extends BaseController<MenuMapper, Menu> {
     menuVo.setMenuParentId(menuName);
     menuVo.setAction(action);
     menuVo.setMenuList(stringList);
-    List<Menu> menuList = baseBiz.findAll(menuVo.toSpec());
+    Sort sort = Sort.by(Sort.Direction.ASC, "sortOrder");
+    List<Menu> menuList = baseBiz.findAll(menuVo.toSpec(),sort);
     return menuList;
   }
 }
