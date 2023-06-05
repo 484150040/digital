@@ -24,10 +24,10 @@ spring:
   profiles:
     active: digital
   redis:
-    host: 121.36.227.233 # Redis服务器地址
+    host: localhost # Redis服务器地址
     database: 0 # Redis数据库索引（默认为0）
     port: 6379 # Redis服务器连接端口
-    password: root
+    password: # Redis服务器连接密码（默认为空）
     jedis:
       pool:
         max-active: 8 # 连接池最大连接数（使用负值表示没有限制）
@@ -38,9 +38,9 @@ spring:
   datasource:
     # primary:
     name: digital
-    url: jdbc:mysql://${MYSQL_HOST:192.168.0.34}:${MYSQL_PORT:3306}/digital?autoReconnect=true&connectTimeout=10000&socketTimeout=30000&useUnicode=true&characterEncoding=UTF8&useSSL=false&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/digital?autoReconnect=true&connectTimeout=10000&socketTimeout=30000&useUnicode=true&characterEncoding=UTF8&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
-    password: XXHMfuwuqi002
+    password: root
     #type: org.apache.commons.dbcp2.BasicDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
     maxActive: 500
@@ -51,7 +51,7 @@ spring:
     auto: true
     proxy-target-class: false
   rabbitmq:
-    host: ${RABBIT_MQ_HOST:localhost}
+    host: ${RABBIT_MQ_HOST:172.16.80.13}
     port: ${RABBIT_MQ_PORT:5672}
     virtual-host: /
     username: admin

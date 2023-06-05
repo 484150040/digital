@@ -46,55 +46,9 @@
       <version>${hm-digital-twin.version}</version>
     </dependency>
     <dependency>
-      <groupId>com.hm.digital.massage</groupId>
-      <artifactId>hm-massage</artifactId>
-      <version>${hm-digital-twin.version}</version>
-    </dependency>
-    <dependency>
       <groupId>hm-interface</groupId>
       <artifactId>hm-interface</artifactId>
       <version>${hm-digital-twin.version}</version>
-    </dependency>
-
-    <!-- ICC鉴权 -->
-    <dependency>
-      <groupId>com.dahuatech.icc</groupId>
-      <artifactId>java-sdk-oauth</artifactId>
-      <version>${icc.sdk.version}</version>
-      <exclusions>
-        <exclusion>
-          <artifactId>java-sdk-core</artifactId>
-          <groupId>com.dahuatech.icc</groupId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>com.dahuatech.icc</groupId>
-      <artifactId>java-sdk-core</artifactId>
-      <version>1.0.9</version>
-    </dependency>
-    <!-- ICC基础资源SDK -->
-    <dependency>
-      <groupId>com.dahuatech.icc</groupId>
-      <artifactId>java-sdk-brm</artifactId>
-      <version>${icc.sdk.version}</version>
-    </dependency>
-    <!-- ICC 事件中心sdk -->
-    <dependency>
-      <groupId>com.dahuatech.icc</groupId>
-      <artifactId>java-sdk-event</artifactId>
-      <version>${icc.sdk.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.cloud</groupId>
-      <artifactId>spring-cloud-openfeign-core</artifactId>
-      <version>2.2.1.RELEASE</version>
-    </dependency>
-    <dependency>
-      <groupId>com.vaadin.external.google</groupId>
-      <artifactId>android-json</artifactId>
-      <version>0.0.20131108.vaadin1</version>
-      <scope>compile</scope>
     </dependency>
     <!--华为云-->
     <dependency>
@@ -114,6 +68,7 @@
       <artifactId>java-jwt</artifactId>
       <version>3.19.0</version>
     </dependency>
+
   </dependencies>
   <build>
     <plugins>
